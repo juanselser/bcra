@@ -107,9 +107,9 @@ fig.update_layout(
     yaxis=dict(title=nombre_variable, titlefont=dict(color="blue"), tickfont=dict(color="blue")),
     yaxis2=dict(title="Tipo de Cambio USD", titlefont=dict(color="red"),
                 tickfont=dict(color="red"), overlaying="y", side="right"),
-    legend=dict(x=0.01, y=0.99),
-    height=500,
-    width=900
+    legend=dict(x=0.01, y=0.99)#,
+    #height=500,
+    #width=900
 )
 
 # Mostrar el gráfico en Streamlit
