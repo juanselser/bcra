@@ -1,9 +1,5 @@
 streamlit
 numpy
 pandas
-nltk
-joblib
-openpyxl
-scikit-learn
 matplotlib
-requests.pyplot
+requests
