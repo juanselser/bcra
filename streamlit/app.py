@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 import pandas as pd
 import plotly.graph_objects as go
-from datetime import date
+from datetime import datetime
 
 st.title("Comparativa: Variable Monetaria vs Tipo de Cambio USD (BCRA)")
 
@@ -25,7 +25,7 @@ id_variable = df_info[df_info["descripcion"] == descripcion_seleccionada].iloc[0
 # =============================
 # SELECCIÓN DE FECHAS
 # =============================
-hoy = date.today()
+hoy = datetime.today()
 fecha_inicio = st.date_input("Fecha de inicio", datetime(2024, 1, 1))
 fecha_fin = st.date_input("Fecha de fin", hoy)
 
