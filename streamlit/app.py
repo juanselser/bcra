@@ -2,6 +2,7 @@ import streamlit as st
 import requests
 import pandas as pd
 import plotly.graph_objects as go
+from datetime import date
 
 st.title("Comparativa: Variable Monetaria vs Tipo de Cambio USD (BCRA)")
 
@@ -12,7 +13,7 @@ url_var_info = "https://api.bcra.gob.ar/estadisticas/v3.0/monetarias"
 res_info = requests.get(url_var_info, verify=False)
 
 if res_info.status_code != 200:
-    st.stop("❌ No se pudieron obtener las variables disponibles desde la API del BCRA.")
+    st.stop("No se pudieron obtener las variables disponibles desde la API del BCRA.")
 
 df_info = pd.DataFrame(res_info.json()["results"])
 df_info = df_info.sort_values("descripcion")
@@ -24,7 +25,7 @@ id_variable = df_info[df_info["descripcion"] == descripcion_seleccionada].iloc[0
 # =============================
 # SELECCIÓN DE FECHAS
 # =============================
-hoy = datetime.today()
+hoy = date.today()
 fecha_inicio = st.date_input("Fecha de inicio", datetime(2024, 1, 1))
 fecha_fin = st.date_input("Fecha de fin", hoy)
 
