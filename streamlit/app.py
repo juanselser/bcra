@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 import pandas as pd
-import matplotlib.pyplot as plt
+import plotly.graph_objects as go
 
 # =============================
 # 🔧 PARÁMETROS – EDITÁ ACÁ
@@ -77,19 +77,40 @@ df = pd.merge(df_v, df_usd, on="fecha", how="inner")
 # =============================
 # GRAFICAR
 # =============================
-fig, ax1 = plt.subplots(figsize=(12, 6))
 
-ax1.set_xlabel('Fecha')
-ax1.set_ylabel(nombre_variable, color='tab:blue')
-ax1.plot(df["fecha"], df[nombre_variable], color='tab:blue', label=nombre_variable)
-ax1.tick_params(axis='y', labelcolor='tab:blue')
+fig = go.Figure()
 
-ax2 = ax1.twinx()
-ax2.set_ylabel('Tipo de Cambio USD', color='tab:red')
-ax2.plot(df["fecha"], df["tipoCotizacion"], color='tab:red', label="USD")
-ax2.tick_params(axis='y', labelcolor='tab:red')
 
-plt.title(f"{nombre_variable} vs Tipo de Cambio USD (BCRA)")
-plt.grid(True)
-plt.tight_layout()
-plt.show()
+
+# Serie de la variable (ej. Reservas)
+fig.add_trace(go.Scatter(
+    x=df["fecha"],
+    y=df[nombre_variable],
+    mode='lines',
+    name=nombre_variable,
+    yaxis="y1"
+))
+
+# Serie del tipo de cambio USD
+fig.add_trace(go.Scatter(
+    x=df["fecha"],
+    y=df["tipoCotizacion"],
+    mode='lines',
+    name='Tipo de Cambio USD',
+    yaxis="y2"
+))
+
+# Layout con doble eje Y
+fig.update_layout(
+    title=f"{nombre_variable} vs Tipo de Cambio USD (BCRA)",
+    xaxis=dict(title="Fecha"),
+    yaxis=dict(title=nombre_variable, titlefont=dict(color="blue"), tickfont=dict(color="blue")),
+    yaxis2=dict(title="Tipo de Cambio USD", titlefont=dict(color="red"),
+                tickfont=dict(color="red"), overlaying="y", side="right"),
+    legend=dict(x=0.01, y=0.99),
+    height=500,
+    width=900
+)
+
+# Mostrar el gráfico en Streamlit
+st.plotly_chart(fig, use_container_width=True)
