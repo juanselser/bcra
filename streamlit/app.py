@@ -6,7 +6,7 @@ import plotly.graph_objects as go
 st.title("Comparativa: Variable Monetaria vs Tipo de Cambio USD (BCRA)")
 
 # =============================
-# 🔽 OBTENER VARIABLES DISPONIBLES
+# OBTENER VARIABLES DISPONIBLES
 # =============================
 url_var_info = "https://api.bcra.gob.ar/estadisticas/v3.0/monetarias"
 res_info = requests.get(url_var_info, verify=False)
