@@ -106,8 +106,8 @@ try:
     fig.update_layout(
         title=f"{descripcion_seleccionada} vs Tipo de Cambio USD (BCRA)",
         xaxis=dict(title="Fecha"),
-        yaxis=dict(title=descripcion_seleccionada, titlefont=dict(color="blue"), tickfont=dict(color="blue")),
-        yaxis2=dict(title="Tipo de Cambio USD", titlefont=dict(color="red"),
+        yaxis=dict(title=descripcion_seleccionada, tickfont=dict(color="blue")),
+        yaxis2=dict(title="Tipo de Cambio USD",
                     tickfont=dict(color="red"), overlaying="y", side="right"),
         legend=dict(x=0.01, y=0.99),
         height=500,
