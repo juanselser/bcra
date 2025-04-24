@@ -32,31 +32,7 @@ fecha_fin = st.date_input("Fecha de fin", hoy)
 if fecha_inicio > fecha_fin:
     st.warning("La fecha de inicio no puede ser posterior a la fecha de fin.")
     st.stop()
-# =============================
-# SELECCIÓN DE FECHAS CON SLIDER
-# =============================
 
-# Definir rango máximo posible (puedes ajustar estos valores)
-min_date_allowed = datetime(2010, 1, 1)
-max_date_allowed = datetime.today()
-
-# Crear slider de rango
-selected_range = st.slider(
-    "Selecciona el rango de fechas:",
-    min_value=min_date_allowed,
-    max_value=max_date_allowed,
-    value=(datetime(2024, 1, 1), max_date_allowed),  # Valor inicial
-    format="YYYY-MM-DD",  # Formato de visualización
-    key="date_slider"  # Clave única para el widget
-)
-
-# Asignar fechas seleccionadas
-fecha_inicio, fecha_fin = selected_range
-
-# Validación adicional
-if fecha_inicio > fecha_fin:
-    st.warning("La fecha de inicio no puede ser posterior a la fecha de fin.")
-    st.stop()
 # =============================
 # CARGAR VARIABLE MONETARIA
 # =============================
