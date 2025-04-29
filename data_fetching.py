@@ -54,7 +54,7 @@ def get_usd_blue():
     url = "https://api.bluelytics.com.ar/v2/evolution.json"
     r = requests.get(url)
     if r.status_code == 200:
-        data = r.json()['blue']
+        data = r.json()
         df = pd.DataFrame(data)
         df['fecha'] = pd.to_datetime(df['date'])
         df['usd_blue'] = (df['value_avg'])
