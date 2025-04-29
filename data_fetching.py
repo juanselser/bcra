@@ -104,7 +104,7 @@ def get_merval(start_date, end_date):
     merval = yf.download("^MERV", start=start_date, end=end_date)["Close"].reset_index()
     merval_close = merval.xs("Close", axis=1, level="Price")
     merval = merval_close.rename(columns={"^MERV": "merval_ars"}).reset_index()
-    merval = merval.rename(columns={"Date": "fecha"})  # ✅ renombrar fecha
+    merval = merval.rename(columns={"Date": "fecha"})
     df_usd_blue_unique = df[["fecha", "usd_blue"]].dropna().drop_duplicates()
     df_merval = pd.merge(merval, df_usd_blue_unique, on="fecha", how="inner")
     df_merval["merval_usd"] = df_merval["merval_ars"] / df_merval["usd_blue"]
