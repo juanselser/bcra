@@ -9,9 +9,6 @@ Original file is located at
 ## **Parte 1: Instalacion de Autoviz**
 Nota:  Se monta el drive para guardar los gráficos
 """
-
-!pip install streamlit
-
 import streamlit as st
 
 st.title("Análisis de Datos Financieros Argentinos")
