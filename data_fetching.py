@@ -3,20 +3,35 @@
 import requests
 import pandas as pd
 import yfinance as yf
+import streamlit as st
 
 # --- Funciones para obtención de datos ---
 
 def get_bcra_variable(id_variable, start_date, end_date):
-    url = f"https://api.bcra.gob.ar/estadisticas/v3.0/monetarias/series/{id_variable}/datos/{start_date}/{end_date}"
-    response = requests.get(url, verify=False)
-    if response.status_code == 200:
-        data = response.json()['results']
-        df = pd.DataFrame(data)
-        df['fecha'] = pd.to_datetime(df['fecha'])
-        df['valor'] = pd.to_numeric(df['valor'], errors='coerce')
-        return df
-    else:
-        raise Exception("Error en la API del BCRA")
+    url = f"https://api.bcra.gob.ar/estadisticas/v3.0/monetarias/{id_variable}?desde={start_date}&hasta={end_date}"
+    try:
+        response = requests.get(url, verify=False, timeout=10)
+        if response.status_code == 200:
+            data = response.json().get('results', [])
+            if not data:
+                st.warning(f"No se encontraron datos para la variable {id_variable} entre {start_date} y {end_date}.")
+                return pd.DataFrame()
+            df = pd.DataFrame(data)
+            df["fecha"] = pd.to_datetime(df["fecha"])
+            df["valor"] = pd.to_numeric(df["valor"], errors="coerce")
+            return df
+        elif response.status_code == 400:
+            st.error(f"Error 400: Fechas mal formateadas en la consulta al BCRA.")
+            return pd.DataFrame()
+        elif response.status_code == 404:
+            st.error(f"Error 404: Variable ID {id_variable} no encontrada en el BCRA.")
+            return pd.DataFrame()
+        else:
+            st.error(f"Error {response.status_code}: Problema en la API del BCRA. Intente nuevamente más tarde.")
+            return pd.DataFrame()
+    except Exception as e:
+        st.error(f"Error al conectar con la API del BCRA: {e}")
+        return pd.DataFrame()
 
 def get_usd_oficial(start_date, end_date):
     url = "https://api.bcra.gob.ar/estadisticascambiarias/v1.0/Cotizaciones/USD"
