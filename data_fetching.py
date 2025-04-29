@@ -108,6 +108,7 @@ def get_merval(start_date, end_date):
     df_usd_blue_unique = df[["fecha", "usd_blue"]].dropna().drop_duplicates()
     df_merval = pd.merge(merval, df_usd_blue_unique, on="fecha", how="inner")
     df_merval["merval_usd"] = df_merval["merval_ars"] / df_merval["usd_blue"]
+    df_merval = df_merval.sort_values("fecha").reset_index(drop=True)
     return df
 
 def get_cedears(start_date, end_date):
