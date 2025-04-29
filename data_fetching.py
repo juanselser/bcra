@@ -53,7 +53,7 @@ def get_usd_blue():
     r = requests.get(url)
     if r.status_code == 200:
         data = r.json()
-        # Crear DataFrame
+        blue_data = [entry for entry in data if entry["source"] == "Blue"]
         df = pd.DataFrame(blue_data)
         df["fecha"] = pd.to_datetime(df["date"])
         df["usd_blue"] = (df["value_buy"] + df["value_sell"]) / 2
