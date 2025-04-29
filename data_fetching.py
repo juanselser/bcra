@@ -102,11 +102,12 @@ def get_cny(start_date, end_date):
 
 def get_merval(start_date, end_date):
     merval = yf.download("^MERV", start=start_date, end=end_date)["Close"].reset_index()
-    merval = merval.rename(columns={"Date": "fecha", "Close": "merval_ars"})
-    df_usd_blue = get_usd_blue()
-    df_usd_blue = df_usd_blue[df_usd_blue['fecha'].between(start_date, end_date)]
-    df = pd.merge(merval, df_usd_blue, on='fecha', how='inner')
-    df['merval_usd'] = df['merval_ars'] / df['usd_blue']
+    merval_close = merval.xs("Close", axis=1, level="Price")
+    merval = merval_close.rename(columns={"^MERV": "merval_ars"}).reset_index()
+    merval = merval.rename(columns={"Date": "fecha"})  # ✅ renombrar fecha
+    df_usd_blue_unique = df[["fecha", "usd_blue"]].dropna().drop_duplicates()
+    df_merval = pd.merge(merval, df_usd_blue_unique, on="fecha", how="inner")
+    df_merval["merval_usd"] = df_merval["merval_ars"] / df_merval["usd_blue"]
     return df
 
 def get_cedears(start_date, end_date):
