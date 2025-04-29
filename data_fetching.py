@@ -34,31 +34,19 @@ def get_bcra_variable(id_variable, start_date, end_date):
         st.error(f"Error al conectar con la API del BCRA: {e}")
         return pd.DataFrame()
 
-def get_usd_oficial(start_date, end_date):
-    # Convertir a datetime si es string
-    today = datetime.today().date()
-    end_date_dt = pd.to_datetime(end_date).date()
-
-    # Limitar la fecha máxima al día anterior si es mayor a hoy
-    if end_date_dt >= today:
-        end_date = (today - pd.Timedelta(days=1)).strftime("%Y-%m-%d")
-
+def get_usd_oficial(fecha_inicio, fecha_fin):
     url = "https://api.bcra.gob.ar/estadisticascambiarias/v1.0/Cotizaciones/USD"
-    params = {"fechadesde": start_date, "fechahasta": end_date, "limit": 1000}
+    params = {"fechadesde": fecha_inicio, "fechahasta": fecha_fin, "limit": 1000}
     r = requests.get(url, params=params, verify=False)
-    
-    if r.status_code == 200:
-        data = r.json()["results"]
-        registros = []
-        for d in data:
-            fecha = d["fecha"]
-            for cot in d["detalle"]:
-                registros.append({"fecha": fecha, "usd_oficial": cot["tipoCotizacion"]})
-        df = pd.DataFrame(registros)
-        df["fecha"] = pd.to_datetime(df["fecha"])
-        return df.groupby("fecha").mean().reset_index()
-    else:
-        raise Exception("Error al obtener USD Oficial")
+    data = r.json()["results"]
+    registros = []
+    for d in data:
+        fecha = d["fecha"]
+        for cot in d["detalle"]:
+            registros.append({"fecha": fecha, "usd_oficial": cot["tipoCotizacion"]})
+    df = pd.DataFrame(registros)
+    df["fecha"] = pd.to_datetime(df["fecha"])
+    return df.groupby("fecha").mean().reset_index()
 
 def get_usd_blue():
     url = "https://api.bluelytics.com.ar/v2/evolution.json"
