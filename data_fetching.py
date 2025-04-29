@@ -53,10 +53,11 @@ def get_usd_blue():
     r = requests.get(url)
     if r.status_code == 200:
         data = r.json()
-        df = pd.DataFrame(data)
-        df['fecha'] = pd.to_datetime(df['date'])
-        df['usd_blue'] = (df['value_avg'])
-        return df[['fecha', 'usd_blue']]
+        # Crear DataFrame
+        df = pd.DataFrame(blue_data)
+        df["fecha"] = pd.to_datetime(df["date"])
+        df["usd_blue"] = (df["value_buy"] + df["value_sell"]) / 2
+        return df[["fecha", "usd_blue"]]
     else:
         raise Exception("Error al obtener USD Blue")
 
