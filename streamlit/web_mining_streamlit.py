@@ -14,7 +14,7 @@ import streamlit as st
 st.title("Análisis de Datos Financieros Argentinos")
 st.header("Respaldo y Presión Cambiaria")
 
-!pip install autoviz
+#!pip install autoviz
 from autoviz.AutoViz_Class import AutoViz_Class
 
 from google.colab import drive
