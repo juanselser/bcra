@@ -36,7 +36,7 @@ import plotly.graph_objects as go
 import yfinance as yf
 from datetime import datetime
 from autoviz.AutoViz_Class import AutoViz_Class
-!pip install yfinance --quiet
+#!pip install yfinance --quiet
 import yfinance as yf
 import plotly.graph_objects as go
 
