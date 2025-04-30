@@ -105,15 +105,26 @@ def get_cny(start_date, end_date):
     return df_cny
 
 def get_merval(start_date, end_date):
-    merval = yf.download("^MERV", start=start_date, end=end_date, group_by="ticker")
-    merval.columns = merval.columns.get_level_values(0)  # elimina el segundo nivel
-    merval = merval.reset_index()
+    merval = yf.download("^MERV", start=start_date, end=end_date).reset_index()
+    
+    if "Close" not in merval.columns:
+        st.error("No se encontró la columna 'Close' en los datos del Merval. Puede que no haya actividad en las fechas seleccionadas.")
+        return pd.DataFrame()
+    
     merval = merval.rename(columns={"Date": "fecha"})
     merval["merval_ars"] = merval["Close"]
-    df_usd_blue = get_usd_blue()
     merval = merval.dropna(subset=["fecha", "merval_ars"]).drop_duplicates(subset=["fecha"])
+
+    df_usd_blue = get_usd_blue()
+    df_usd_blue = df_usd_blue[df_usd_blue["fecha"].between(start_date, end_date)]
     df_usd_blue = df_usd_blue.dropna(subset=["fecha", "usd_blue"]).drop_duplicates(subset=["fecha"])
+
     df_merval = pd.merge(merval[["fecha", "merval_ars"]], df_usd_blue, on="fecha", how="inner")
+
+    if df_merval.empty:
+        st.warning("No hay datos disponibles para calcular el Merval en USD en el rango seleccionado.")
+        return pd.DataFrame()
+
     df_merval["merval_usd"] = df_merval["merval_ars"] / df_merval["usd_blue"]
     df_merval = df_merval.sort_values("fecha").reset_index(drop=True)
 
