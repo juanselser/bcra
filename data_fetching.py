@@ -135,4 +135,4 @@ def get_cedears(start_date, end_date):
     for ticker in cedears.keys():
         df_cedears[ticker] = (df_cedears[ticker] / df_cedears[ticker].iloc[0]) * 100
     df_cedears = df_cedears.dropna().sort_values("fecha").reset_index(drop=True)
-    return df
+    return df_cedears
