@@ -89,3 +89,7 @@ def test_yfinance_download():
 # Footer
 st.caption(f"Actualizado el {today.strftime('%d/%m/%Y')}")
 
+
+test_yfinance_download()
+
+
