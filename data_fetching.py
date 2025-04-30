@@ -105,7 +105,7 @@ def get_cny(start_date, end_date):
     return df_cny
 
 def get_merval(start_date, end_date):
-    merval = yf.download("^MERV", start=start_date, end=end_date).reset_index()
+    merval = yf.download("^MERV", start=start_date, end=end_date)
     merval_close = merval.xs("Close", axis=1, level="Price")
     merval = merval_close.rename(columns={"^MERV": "merval_ars"}).reset_index()
     merval = merval.rename(columns={"Date": "fecha"})
