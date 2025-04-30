@@ -110,11 +110,9 @@ def get_merval(start_date, end_date):
     merval = merval_close.rename(columns={"^MERV": "merval_ars"}).reset_index()
     merval = merval.rename(columns={"Date": "fecha"})
     merval = merval.rename(columns={"Date": "fecha"})
-    #merval = merval.dropna().drop_duplicates(subset=["fecha"])
 
     df_usd_blue = get_usd_blue()
     df_usd_blue = df_usd_blue[df_usd_blue["fecha"].between(start_date, end_date)]
-    #df_usd_blue = df_usd_blue.dropna().drop_duplicates(subset=["fecha"])
 
     df_merval = pd.merge(merval, df_usd_blue, on="fecha", how="inner")
     df_merval["merval_usd"] = df_merval["merval_ars"] / df_merval["usd_blue"]
