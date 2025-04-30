@@ -95,9 +95,8 @@ def plot_cny(df):
     return fig
 
 def plot_merval(df):
-    ultimo_valor = "2"
-    ultimo_mes = "2"
-
+    if df.empty or "fecha" not in df.columns or "merval_usd" not in df.columns:
+        return go.Figure()
     fig = go.Figure()
     fig.add_trace(go.Scatter(
         x=df["fecha"],
@@ -107,7 +106,6 @@ def plot_merval(df):
         connectgaps=True,
         line=dict(color="#FF5733", width=3)
     ))
-    
     return fig
 
 def plot_cedears(df):
