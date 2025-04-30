@@ -95,7 +95,7 @@ def plot_cny(df):
     return fig
 
 def plot_merval(df):
-    ultimo_valor = df["merval_usd"].dropna().iloc[-1]
+    ultimo_valor = "2"
     ultimo_mes = df["fecha"].dt.strftime("%B %Y").iloc[-1]
 
     fig = go.Figure()
