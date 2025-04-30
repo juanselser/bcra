@@ -133,6 +133,7 @@ def get_cedears(start_date, end_date):
     df_cedears = data.reset_index()
     df_cedears = df_cedears.rename(columns={"Date": "fecha"})
     for ticker in cedears.keys():
-        df_cedears[ticker] = (df_cedears[ticker] / df_cedears[ticker].iloc[0]) * 100
-    df_cedears = df_cedears.dropna().sort_values("fecha").reset_index(drop=True)
+        if ticker in df_cedears.columns and not df_cedears[ticker].dropna().empty:
+            df_cedears[ticker] = (df_cedears[ticker] / df_cedears[ticker].iloc[0]) * 100
+    df_cedears = df_cedears.dropna(how="all", subset=list(cedears.keys())).sort_values("fecha").reset_index(drop=True)
     return df_cedears
