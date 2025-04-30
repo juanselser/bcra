@@ -109,7 +109,6 @@ def get_merval(start_date, end_date):
     merval_close = merval.xs("Close", axis=1, level="Price")
     merval = merval_close.rename(columns={"^MERV": "merval_ars"}).reset_index()
     merval = merval.rename(columns={"Date": "fecha"})
-    merval = merval.rename(columns={"Date": "fecha"})
 
     df_usd_blue = get_usd_blue()
     df_usd_blue = df_usd_blue[df_usd_blue["fecha"].between(start_date, end_date)]
