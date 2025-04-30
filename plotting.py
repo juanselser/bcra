@@ -95,13 +95,13 @@ def plot_cny(df):
     return fig
 
 def plot_merval(df):
-    ultimo_valor = df["merval_usd"].dropna().iloc[-1]
-    ultimo_mes = df["fecha"].dt.strftime("%B %Y").iloc[-1]
+    ultimo_valor = df_merval["merval_usd"].dropna().iloc[-1]
+    ultimo_mes = df_merval["fecha"].dt.strftime("%B %Y").iloc[-1]
 
     fig = go.Figure()
     fig.add_trace(go.Scatter(
-        x=df["fecha"],
-        y=df["merval_usd"],
+        x=df_merval["fecha"],
+        y=df_merval["merval_usd"],
         fill="tozeroy",
         mode="lines",
         connectgaps=True,
