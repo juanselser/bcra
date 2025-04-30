@@ -105,34 +105,20 @@ def get_cny(start_date, end_date):
     return df_cny
 
 def get_merval(start_date, end_date):
-    merval = yf.download("^MERV", start=start_date, end=end_date, group_by="ticker")
-    if merval.empty:
-        st.warning("No hay datos del Merval para las fechas seleccionadas.")
-        return pd.DataFrame()
-    try:
-        if isinstance(merval.columns, pd.MultiIndex):
-            merval_close = merval.xs("Close", axis=1, level=0)
-        else:
-            merval_close = merval[["Close"]].copy()
-        merval = merval_close.rename(columns={merval_close.columns[0]: "merval_ars"}).reset_index()
-        merval.columns.name = None
-    except Exception as e:
-        st.error(f"No se pudo obtener la columna 'Close' del Merval: {e}")
-        st.write("Columnas disponibles:", merval.columns)
-        return pd.DataFrame()
+    merval = yf.download("^MERV", start=start_date, end=end_date).reset_index()
     merval = merval.rename(columns={"Date": "fecha"})
-    merval = merval.dropna(subset=["fecha", "merval_ars"]).drop_duplicates(subset=["fecha"])
+    merval = merval[["fecha", "Adj Close"]].rename(columns={"Adj Close": "merval_ars"})
+    merval = merval.dropna().drop_duplicates(subset=["fecha"])
+
     df_usd_blue = get_usd_blue()
     df_usd_blue = df_usd_blue[df_usd_blue["fecha"].between(start_date, end_date)]
-    df_usd_blue = df_usd_blue.dropna(subset=["fecha", "usd_blue"]).drop_duplicates(subset=["fecha"])
-    try:
-        df_merval = pd.merge(merval[["fecha", "merval_ars"]], df_usd_blue, on="fecha", how="inner")
-    except Exception as e:
-        st.error(f"Error al hacer el merge entre Merval y USD Blue: {e}")
-        return pd.DataFrame()
+    df_usd_blue = df_usd_blue.dropna().drop_duplicates(subset=["fecha"])
+
+    df_merval = pd.merge(merval, df_usd_blue, on="fecha", how="inner")
     df_merval["merval_usd"] = df_merval["merval_ars"] / df_merval["usd_blue"]
     df_merval = df_merval.sort_values("fecha").reset_index(drop=True)
     return df_merval
+
 
 
 
