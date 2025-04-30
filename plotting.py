@@ -107,7 +107,7 @@ def plot_merval(df):
         connectgaps=True,
         line=dict(color="#FF5733", width=3)
     ))
-    fig.update_layout(**layout_config("Merval en USD", ultimo_mes, f"{ultimo_valor:,.0f}"))
+    
     return fig
 
 def plot_cedears(df):
