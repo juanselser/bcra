@@ -94,7 +94,7 @@ def plot_cny(df):
     fig.update_layout(**layout_config("Tipo de Cambio (CNY/ARS)", ultimo_mes, f"{ultimo_valor:.1f}"))
     return fig
 
-def plot_merval(df):
+def plot_merval(df_merval):
     ultimo_valor = df_merval["merval_usd"].dropna().iloc[-1]
     ultimo_mes = df_merval["fecha"].dt.strftime("%B %Y").iloc[-1]
 
