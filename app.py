@@ -70,9 +70,6 @@ with col3:
     - Evolución del mercado accionario argentino: ...
     """)
 
-# Footer
-st.caption(f"Actualizado el {today.strftime('%d/%m/%Y')}")
-
 
 def test_yfinance_download():
     import yfinance as yf
@@ -87,3 +84,8 @@ def test_yfinance_download():
             st.dataframe(test_df.head())
     except Exception as e:
         st.error(f"❌ Error al ejecutar yf.download: {e}")
+
+
+# Footer
+st.caption(f"Actualizado el {today.strftime('%d/%m/%Y')}")
+
