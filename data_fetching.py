@@ -44,9 +44,12 @@ def get_usd_oficial(fecha_inicio, fecha_fin):
         fecha = d["fecha"]
         for cot in d["detalle"]:
             registros.append({"fecha": fecha, "usd_oficial": cot["tipoCotizacion"]})
+
     df = pd.DataFrame(registros)
     df["fecha"] = pd.to_datetime(df["fecha"])
-    return df.groupby("fecha").mean().reset_index()
+    df = df.groupby("fecha").mean(numeric_only=True).reset_index()
+    df = df.dropna(subset=["fecha", "usd_oficial"]).drop_duplicates(subset=["fecha"])
+    return df
 
 def get_usd_blue():
     url = "https://api.bluelytics.com.ar/v2/evolution.json"
@@ -57,6 +60,7 @@ def get_usd_blue():
         df = pd.DataFrame(blue_data)
         df["fecha"] = pd.to_datetime(df["date"])
         df["usd_blue"] = (df["value_buy"] + df["value_sell"]) / 2
+        df = df.dropna(subset=["fecha", "usd_blue"]).drop_duplicates(subset=["fecha"])
         return df[["fecha", "usd_blue"]]
     else:
         raise Exception("Error al obtener USD Blue")
@@ -105,6 +109,8 @@ def get_merval(start_date, end_date):
     merval = merval.rename(columns={"Date": "fecha"})
     merval["merval_ars"] = merval["Close"]
     df_usd_blue = get_usd_blue()
+    merval = merval.dropna(subset=["fecha", "merval_ars"]).drop_duplicates(subset=["fecha"])
+    df_usd_blue = df_usd_blue.dropna(subset=["fecha", "usd_blue"]).drop_duplicates(subset=["fecha"])
     df_merval = pd.merge(merval, df_usd_blue, on="fecha", how="inner")
     df_merval["merval_usd"] = df_merval["merval_ars"] / df_merval["usd_blue"]
     df_merval = df_merval.sort_values("fecha").reset_index(drop=True)
