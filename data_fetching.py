@@ -106,7 +106,7 @@ def get_merval(start_date, end_date):
     merval = merval_close.rename(columns={"^MERV": "merval_ars"}).reset_index()
     merval = merval.rename(columns={"Date": "fecha"})
     df_usd_blue = get_usd_blue()
-    df_usd_blue = df_usd_blue[df_usd_blue['fecha'].between(start_date, end_date)]
+    df_usd_blue = df_usd_blue[df_usd_blue["fecha"].between(start_date, end_date)]
     df_merval = pd.merge(merval, df_usd_blue, on="fecha", how="inner")
     df_merval["merval_usd"] = df_merval["merval_ars"] / df_merval["usd_blue"]
     df_merval = df_merval.sort_values("fecha").reset_index(drop=True)
