@@ -102,15 +102,14 @@ def get_cny(start_date, end_date):
 
 def get_merval(start_date, end_date):
     merval = yf.download("^MERV", start=start_date, end=end_date).reset_index()
-    merval_close = merval.xs("Close", axis=1, level="Price")
-    merval = merval_close.rename(columns={"^MERV": "merval_ars"}).reset_index()
     merval = merval.rename(columns={"Date": "fecha"})
+    merval["merval_ars"] = merval["Close"]
     df_usd_blue = get_usd_blue()
     df_usd_blue = df_usd_blue[df_usd_blue["fecha"].between(start_date, end_date)]
     df_merval = pd.merge(merval, df_usd_blue, on="fecha", how="inner")
     df_merval["merval_usd"] = df_merval["merval_ars"] / df_merval["usd_blue"]
     df_merval = df_merval.sort_values("fecha").reset_index(drop=True)
-    return df
+    return df_merval
 
 def get_cedears(start_date, end_date):
     tickers = ["YPFD.BA", "GGAL.BA", "BMA.BA", "MELI.BA"]
