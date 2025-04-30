@@ -123,10 +123,16 @@ def get_merval(start_date, end_date):
 
 
 def get_cedears(start_date, end_date):
-    tickers = ["YPFD.BA", "GGAL.BA", "BMA.BA", "MELI.BA"]
-    data = yf.download(tickers, start=start_date, end=end_date)["Close"]
-    df = data.reset_index().rename(columns={"Date": "fecha"})
-    for ticker in tickers:
-        df[ticker] = (df[ticker] / df[ticker].iloc[0]) * 100
-    df = df.dropna().sort_values("fecha").reset_index(drop=True)
+    cedears = {
+    "YPFD.BA": "YPF",
+    "GGAL.BA": "Galicia",
+    "BMA.BA": "Banco Macro",
+    "MELI.BA": "MercadoLibre"
+}
+    data = yf.download(list(cedears.keys()), start=start_date, end=end_date)["Close"]
+    df_cedears = data.reset_index()
+    df_cedears = df_cedears.rename(columns={"Date": "fecha"})
+    for ticker in cedears.keys():
+        df_cedears[ticker] = (df_cedears[ticker] / df_cedears[ticker].iloc[0]) * 100
+    df_cedears = df_cedears.dropna().sort_values("fecha").reset_index(drop=True)
     return df
