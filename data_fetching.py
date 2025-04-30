@@ -106,9 +106,6 @@ def get_cny(start_date, end_date):
 
 def get_merval(start_date, end_date):
     merval = yf.download("^MERV", start=start_date, end=end_date)
-    if merval.empty:
-        st.error("No se pudieron obtener datos del Merval desde Yahoo Finance. Puede ser una restricción del entorno (como Streamlit Cloud).")
-        return pd.DataFrame()
     merval_close = merval.xs("Close", axis=1, level="Price")
     merval = merval_close.rename(columns={"^MERV": "merval_ars"}).reset_index()
     merval = merval.rename(columns={"Date": "fecha"})
