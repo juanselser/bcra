@@ -106,9 +106,9 @@ def get_cny(start_date, end_date):
 
 def get_merval(start_date, end_date):
     merval = yf.download("^MERV", start=start_date, end=end_date).reset_index()
+    merval_close = merval.xs("Close", axis=1, level="Price")
+    merval = merval_close.rename(columns={"^MERV": "merval_ars"}).reset_index()
     merval = merval.rename(columns={"Date": "fecha"})
-    merval = merval[["fecha", "Adj Close"]].rename(columns={"Adj Close": "merval_ars"})
-    merval = merval.dropna().drop_duplicates(subset=["fecha"])
 
     df_usd_blue = get_usd_blue()
     df_usd_blue = df_usd_blue[df_usd_blue["fecha"].between(start_date, end_date)]
