@@ -94,14 +94,14 @@ def plot_cny(df):
     fig.update_layout(**layout_config("Tipo de Cambio (CNY/ARS)", ultimo_mes, f"{ultimo_valor:.1f}"))
     return fig
 
-def plot_merval(df_merval):
-    ultimo_valor = df_merval["merval_usd"].dropna().iloc[-1]
-    ultimo_mes = df_merval["fecha"].dt.strftime("%B %Y").iloc[-1]
+def plot_merval(df):
+    ultimo_valor = df["merval_usd"].dropna().iloc[-1]
+    ultimo_mes = df["fecha"].dt.strftime("%B %Y").iloc[-1]
 
     fig = go.Figure()
     fig.add_trace(go.Scatter(
-        x=df_merval["fecha"],
-        y=df_merval["merval_usd"],
+        x=df["fecha"],
+        y=df["merval_usd"],
         fill="tozeroy",
         mode="lines",
         connectgaps=True,
