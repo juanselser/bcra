@@ -72,3 +72,18 @@ with col3:
 
 # Footer
 st.caption(f"Actualizado el {today.strftime('%d/%m/%Y')}")
+
+
+def test_yfinance_download():
+    import yfinance as yf
+    st.subheader("🧪 Prueba directa de yfinance")
+    try:
+        test_df = yf.download("^MERV", start="2024-01-01", end="2024-01-10").reset_index()
+        if test_df.empty:
+            st.error("⚠️ No se obtuvieron datos del Merval con yfinance.")
+        else:
+            st.success(f"✅ yfinance devolvió {test_df.shape[0]} filas.")
+            st.write("Columnas:", test_df.columns.tolist())
+            st.dataframe(test_df.head())
+    except Exception as e:
+        st.error(f"❌ Error al ejecutar yf.download: {e}")
